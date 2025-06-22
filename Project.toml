@@ -3,7 +3,13 @@ uuid = "5ba887ca-4eef-4e5c-a43f-26847c901831"
 authors = ["ArrogantGao <xz.gao@connect.ust.hk> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+BitBasis = "50ba71b6-fa0f-514d-ae9a-0916efc90dcf"
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+
 [compat]
+BitBasis = "0.9.10"
+Graphs = "1.13.0"
 julia = "1.6.7"
 
 [extras]

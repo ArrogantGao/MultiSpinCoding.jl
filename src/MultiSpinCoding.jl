@@ -1,5 +1,9 @@
 module MultiSpinCoding
 
-# Write your package code here.
+using Graphs
+using BitBasis
+
+include("types.jl")
+include("sa.jl")
 
 end
