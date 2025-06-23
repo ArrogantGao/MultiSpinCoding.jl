@@ -6,7 +6,7 @@
 <!-- [![Coverage](https://codecov.io/gh/ArrogantGao/MultiSpinCoding.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/ArrogantGao/MultiSpinCoding.jl) -->
 
 
-An implementation of multi-spin coding for simulating the spin-glass model, according to "Optimised simulated annealing for Ising spin glasses".
+An implementation of multi-spin coding for simulating the spin-glass model, according to [Optimised simulated annealing for Ising spin glasses](https://www.sciencedirect.com/science/article/pii/S0010465515000727).
 The one implemented here is the method named `an_ms_r1_nf` in the paper, which requires $s = \pm 1$, $J_{ij} = \pm 1$ and $h = 0$.
 
 ## Usage
