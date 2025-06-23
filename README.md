@@ -81,9 +81,35 @@ BenchmarkTools.Trial: 368 samples with 1 evaluation per sample.
 
  Memory estimate: 0 bytes, allocs estimate: 0.
 
-julia> 6.038 / 2000 / 64 * 1e6
-47.171875 # 47.171875 ns per round of update    
+julia> 256 / (6.038 / 2000 / 64 * 1e6)
+5.426962570387546 # Spin flips per ns
 
-julia> 12.192 / 2000 / 1024 * 1e6
-5.953125 # 5.953125 ns per round of update
+julia> 256 / (12.192 / 2000 / 1024 * 1e6)
+43.00262467191601 # Spin flips per ns
+```
+
+Another benchmark is on the instance `example/instance503.txt`, which is a 503-spin instance.
+```julia
+julia> g, J = load_instance("example/instance503.txt");
+
+julia> scheduler = Scheduler(2000, 0.1, 3.0);
+
+julia> model = SpinGlass(g, J, 1024);
+
+julia> @benchmark sa!($model, $scheduler)
+
+julia> @benchmark sa!($model, $scheduler)
+BenchmarkTools.Trial: 107 samples with 1 evaluation per sample.
+ Range (min … max):  42.536 ms … 52.678 ms  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     46.973 ms              ┊ GC (median):    0.00%
+ Time  (mean ± σ):   46.788 ms ±  1.582 ms  ┊ GC (mean ± σ):  0.00% ± 0.00%
+
+                                                        █▃▁    
+  ▃▁▃▃▃▁▁▁▃▁▄▃▁▁▁▁▃▃▁▄▄▃▁▁▁▁▃▁▃▁▃▄▁▃█▄▇█▄▁▄▇█▆█▃▁█▃▃▃▃▃████▄▇ ▃
+  42.5 ms         Histogram: frequency by time        48.5 ms <
+
+ Memory estimate: 0 bytes, allocs estimate: 0.
+
+julia> 503 / (42.536 / 2000 / 1024 * 1e6)
+24.218168139928526 # Spin flips per ns (6.65 in the paper)
 ```
