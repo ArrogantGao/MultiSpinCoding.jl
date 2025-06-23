@@ -39,3 +39,51 @@ energies = cal_energies(model)
 One can also use the script `example/square16x16.jl` to run the example, which will generate a histogram of the final energy of the replicas. The result is shown below:
 
 ![](example/square16x16.png)
+
+## Benchmark
+
+A simple benchmark is shown below:
+
+```julia
+julia> using MultiSpinCoding, BenchmarkTools
+
+julia> g, J = load_instance("example/square16x16.txt");
+
+julia> scheduler = Scheduler(2000, 0.1, 3.0);
+
+# 64 replicas stored in a single UInt64
+julia> model = SpinGlass(g, J, 64);
+
+julia> @benchmark sa!($model, $scheduler)
+BenchmarkTools.Trial: 764 samples with 1 evaluation per sample.
+ Range (min … max):  6.038 ms …   6.982 ms  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     6.236 ms               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   6.506 ms ± 345.907 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+
+           ▂█▂                                            ▇█   
+  ▃▃▃▂▂▂▂▄████▇▆▃▃▂▂▂▁▂▁▁▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▁▁▂▁▁▁▁▃▃▆▇██▇ ▃
+  6.04 ms         Histogram: frequency by time        6.92 ms <
+
+ Memory estimate: 0 bytes, allocs estimate: 0.
+
+# 1024 replicas stored in a LongLongUInt{16}
+julia> model = SpinGlass(g, J, 1024);
+
+julia> @benchmark sa!($model, $scheduler)
+BenchmarkTools.Trial: 368 samples with 1 evaluation per sample.
+ Range (min … max):  12.192 ms …  14.028 ms  ┊ GC (min … max): 0.00% … 0.00%
+ Time  (median):     13.847 ms               ┊ GC (median):    0.00%
+ Time  (mean ± σ):   13.585 ms ± 522.950 μs  ┊ GC (mean ± σ):  0.00% ± 0.00%
+
+                                                       ▇▁█▅▆▆▁  
+  ▂▂▁▁▁▁▁▂▁▁▁▁▃█▆▇▆▄▄▄▁▂▁▁▁▂▁▁▁▁▃▁▃▃▁▁▂▃▁▂▁▃▁▁▁▁▂▃▄▃▂▃████████ ▃
+  12.2 ms         Histogram: frequency by time           14 ms <
+
+ Memory estimate: 0 bytes, allocs estimate: 0.
+
+julia> 6.038 / 2000 / 64 * 1e6
+47.171875 # 47.171875 ns per round of update    
+
+julia> 12.192 / 2000 / 1024 * 1e6
+5.953125 # 5.953125 ns per round of update
+```
