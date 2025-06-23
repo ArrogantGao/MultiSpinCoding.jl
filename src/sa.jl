@@ -22,7 +22,7 @@
             elseif d == 6
                 update_d6!(i, spins, Js, nebis, probs, u)
             else
-                error("degree of site $i is $d, which is not supported")
+                error("degree of site $i is $d larger than 6, which is not supported")
             end
         end
     end
