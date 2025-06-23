@@ -7,7 +7,7 @@ struct SpinGlass{INT}
 
     n::Int
 
-    function SpinGlass(graph::SimpleGraph{Int}, J::Matrix{Int}, n::Int)
+    function SpinGlass(graph::SimpleGraph{Int}, J::Matrix{Int}, n::Int; seed::Int=1234)
 
         @assert maximum(degree(graph)) <= 6
         @assert size(J) == (nv(graph), nv(graph))
@@ -18,6 +18,7 @@ struct SpinGlass{INT}
 
         N = (n - 1) ÷ 64 + 1
         INT = BitStr{n, LongLongUInt{N}}
+        Random.seed!(seed)
         spins = [random_state(n) for _ in 1:nv(graph)]
         Js = zeros(INT, nv(graph), nv(graph))
         for e in edges(graph)
